@@ -4,110 +4,129 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#091321">
-<title>Dhakir TV | Ukaguzi wa Video</title>
+<title>Dhakir TV | Ukaguzi wa Video r2</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#091321;color:#ecf8ff;font-family:Arial,Helvetica,sans-serif;min-height:100vh}
-main{width:94%;max-width:1350px;margin:auto;padding:24px 0}
-h1{font-size:38px;margin:8px 0}
-h2{font-size:24px;margin:20px 0 12px}
-p{font-size:19px;color:#adcad8;line-height:1.45}
-header{display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid #33526b;padding-bottom:12px}
-a,button{font-size:19px;border-radius:12px;text-decoration:none;cursor:pointer}
-a{color:#7bdfec}
-button{border:1px solid #366b7d;background:#14556b;color:#fff;padding:14px 22px;margin:3px}
-a:focus,button:focus,video:focus{outline:5px solid #ffd54f;outline-offset:5px}
-video{width:100%;height:auto;max-height:57vh;object-fit:contain;background:#000;border:2px solid #33536e;border-radius:12px}
-.controls{display:flex;flex-wrap:wrap;margin:11px 0 12px;gap:4px}
-.panel{padding:14px 20px;border:1px solid #35546d;border-radius:12px;background:#172c40}
-.status{font-size:22px;color:#b6f0e8}
-.metrics{display:flex;gap:25px;flex-wrap:wrap;padding:12px 0}
-.metrics div{min-width:140px}
-.metrics strong{font-size:28px;color:#79deeb}
-.metrics small{display:block;font-size:15px;color:#a7bfd1}
-#events{white-space:pre-wrap;word-break:break-word;font:17px/1.6 Consolas,monospace;color:#b9d8e8;max-height:210px;overflow-y:auto;margin:0}
-.tip{font-size:17px;color:#adc4d1}
-.note{font-size:16px;color:#97b1c5}
+*{box-sizing:border-box}body{margin:0;background:#091321;color:#edf8ff;font-family:Arial,Helvetica,sans-serif}main{width:94%;max-width:1420px;margin:auto;padding:20px 0}header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #38556c;padding-bottom:12px;gap:16px}h1{font-size:31px;margin:0}h2{font-size:22px;margin:12px 0}p{font-size:18px;line-height:1.4;color:#bad0df;margin:12px 0}a{color:#8be7ef}a,button{font-family:inherit;font-size:18px}button,a.action{padding:12px 18px;border-radius:10px;border:1px solid #50728b;background:#183c54;color:#f0fbff;cursor:pointer;text-decoration:none;display:inline-block}button.primary{background:#68dce6;color:#08202b;font-weight:bold}button[aria-pressed="true"]{border:2px solid #6ce2e6}a:focus,button:focus,video:focus{outline:4px solid #ffd267;outline-offset:3px}.buttons{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}video{width:100%;height:260px;max-height:35vh;background:#000;border:1px solid #405b71;border-radius:12px;object-fit:contain}.panel{background:#152b40;border:1px solid #3c5d74;border-radius:12px;padding:15px 18px;margin-top:12px}#status{font-size:23px;line-height:1.4;color:#b5eff2;min-height:32px}.stats{display:flex;gap:32px;flex-wrap:wrap;margin:12px 0}.stats strong{font-size:27px;color:#91e4ef}.stats small{display:block;color:#b1c7d9;font-size:16px}.small{font-size:15px;color:#a9c1d3;overflow-wrap:anywhere}.mono{white-space:pre-wrap;overflow-wrap:anywhere;font:16px/1.5 Consolas,monospace}#events{max-height:180px;overflow-y:auto;margin:0}#capabilities{margin:8px 0}#source{color:#8adce8}.good{color:#b2e7bc}.bad{color:#ffc9bd}@media(max-width:700px){header{display:block}h1{font-size:24px}video{height:220px}.stats{gap:15px}.buttons{gap:8px}button,a.action{font-size:16px}}
 </style>
 </head>
-<body>
-<main>
-<header><div><h1>Dhakir TV — Ukaguzi wa Video</h1><p style="margin:0">Jaribio la HTML5 MP4, si YouTube</p></div><a href="./index.html">← Rudi Dhakir</a></header>
-<h2>Cheza video kamili ya takribani sekunde 52</h2>
-<p>Bonyeza <b>Cheza</b> kisha angalia kama inafika mwisho. Hiki ni kipimo cha browser na mtandao, hakitoi udhibiti wa video za YouTube.</p>
-<video id="video" preload="metadata" controls playsinline tabindex="0" poster="https://media.w3.org/2010/05/sintel/poster.png">
- <source src="https://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
- Browser haiwezi kucheza HTML5 video.
-</video>
-<div class="controls">
-<button type="button" id="play">▶ Cheza / Simamisha</button>
-<button type="button" id="full">⛶ Fullscreen</button>
-<button type="button" id="clear">Futa taarifa</button>
-<button type="button" id="reload">↻ Jaribu tena</button>
+<body><main>
+<header><h1>Dhakir TV — Ukaguzi wa Video <span style="color:#7cdae9">r2</span></h1><a class="action" href="./index.html">Rudi Dhakir</a></header>
+<p>Jaribio jipya: <b>sekunde 70</b>, 640 × 360, H.264 Baseline. Bonyeza <b>Cheza</b>, usisogeze muda mbele. Hili ni jaribio la MP4, si marekebisho ya YouTube.</p>
+<div class="buttons"><button id="withAudio" type="button" aria-pressed="true">1. Video + sauti</button><button id="withoutAudio" type="button" aria-pressed="false">2. Video bila sauti</button><a id="direct" class="action" href="./dhakir-test-h264-70s.mp4">Fungua MP4 moja kwa moja</a></div>
+<video id="video" controls preload="metadata" playsinline tabindex="0"></video>
+<div class="buttons"><button id="play" class="primary" type="button">Cheza / Simamisha</button><button id="full" type="button">Skrini nzima</button><button id="probe" type="button">Kagua faili</button><button id="reload" type="button">Anza jaribio upya</button></div>
+<div class="panel"><div id="status" role="status" aria-live="polite">Inapakia taarifa za video...</div>
+<div class="stats"><div><strong id="time">0:00</strong><small>Muda wa video</small></div><div><strong id="duration">—</strong><small>Urefu wa video</small></div><div><strong id="wall">0 s</strong><small>Tangu kuanza kucheza</small></div><div><strong id="buffer">—</strong><small>Buffer iliyo mbele</small></div></div>
+<div id="source" class="small"></div><div id="network" class="small">Mtandao: bado haujapimwa.</div>
+<div id="capabilities" class="small"></div><div id="state" class="small"></div>
+<h2>Matukio ya player</h2><pre id="events" class="mono"></pre>
 </div>
-<div class="panel">
-<div id="status" class="status">Tayari kwa kujaribu.</div>
-<div class="metrics">
-<div><strong id="time">0:00</strong><small>Muda wa video</small></div>
-<div><strong id="duration">—</strong><small>Urefu wa video</small></div>
-<div><strong id="wall">0 s</strong><small>Sekunde tangu Cheza</small></div>
-<div><strong id="buffer">—</strong><small>Video iliyopakiwa</small></div>
-</div>
-<p class="tip" id="hint">Ukifika 0:45 au mwisho bila kusimama, jaribio hili la MP4 limepita zaidi ya sekunde 39.</p>
-<h2>Matukio ya player</h2>
-<pre id="events"></pre>
-</div>
-<p class="note">Chanzo: W3C Sintel MP4 (H.264/AAC). Ripoti hizi zinabaki ndani ya ukurasa wa TV; hazitumwi kwa seva ya Dhakir. Tovuti ya YouTube ina player yake tofauti, kwa hiyo matokeo yake yanaweza kutofautiana.</p>
+<p class="small">Video za jaribio zimetengenezwa kwa Dhakir na zinatoka kwenye anwani ileile ya ukurasa huu. Hakuna matangazo, DRM au stream ya YouTube kwenye jaribio. Ripoti hii haipakii taarifa zako kwa seva ya Dhakir. canPlayType/MSE ni taarifa za uwezo tu, si uthibitisho wa uchezaji.</p>
 </main>
 <script>
 (function(){
-"use strict";
-var v=document.getElementById("video"),s=document.getElementById("status"),out=document.getElementById("events");
-var startAt=0,lastTime=0,lastProgressAt=0,stallLogged=false,over39=false;
-function one(n){return document.getElementById(n)}
-function time(n){if(!isFinite(n))return "—";n=Math.floor(n);return Math.floor(n/60)+":"+("0"+(n%60)).slice(-2)}
-function log(t){
- var line="["+time(v.currentTime)+"] "+t+"\n";
- out.textContent=(line+out.textContent).slice(0,2800)
+'use strict';
+var $=function(id){return document.getElementById(id)};
+var v=$('video'),s=$('status'),out=$('events');
+var choice=0,epoch=0,startAt=0,lastAt=0,lastTime=0,played=0,seeked=false,stalled=false,milestone=false,probeBusy=false;
+var files=['./dhakir-test-h264-70s.mp4','./dhakir-test-h264-silent-70s.mp4'];
+var labels=['H.264 Baseline L3.0 + AAC-LC, 70 s','H.264 Baseline L3.0, bila audio track, 70 s'];
+var pendingProbe=null;
+function clock(n){if(!isFinite(n)||n<0)return '—';n=Math.floor(n);return Math.floor(n/60)+':'+('0'+n%60).slice(-2)}
+function log(text){out.textContent=('['+clock(v.currentTime)+'] '+text+'\n'+out.textContent).slice(0,5500)}
+function message(text){s.textContent=text}
+function support(type){try{return v.canPlayType(type)||'haijatangazwa'}catch(e){return 'API haipatikani'}}
+function capabilities(){
+ var ms=window.MediaSource||window.WebKitMediaSource;
+ var mse='haipatikani';
+ try{if(ms&&ms.isTypeSupported)mse=String(ms.isTypeSupported('video/mp4; codecs="avc1.42c01e"'))}catch(e){}
+ $('capabilities').textContent='canPlayType: H.264='+support('video/mp4; codecs="avc1.42c01e"')+' | AAC='+support('audio/mp4; codecs="mp4a.40.2"')+' | H.264+AAC='+support('video/mp4; codecs="avc1.42c01e, mp4a.40.2"')+' | MSE/H.264='+mse;
 }
-function show(){
- one("time").textContent=time(v.currentTime);
- one("duration").textContent=time(v.duration);
- one("wall").textContent=startAt?(Math.round((Date.now()-startAt)/1000)+" s"):"0 s";
- try{one("buffer").textContent=v.buffered.length?time(v.buffered.end(v.buffered.length-1)):"—"}catch(e){}
- if(v.currentTime>lastTime+.2){lastTime=v.currentTime;lastProgressAt=Date.now();stallLogged=false}
- if(v.currentTime>=45&&!over39){over39=true;s.textContent="✓ Video imevuka sekunde 45 — hakuna kukatika kwa mpaka wa sekunde 39 kwenye jaribio hili.";log("IMEVUKA SEKUNDE 45")}
- if(!v.paused&&!v.ended&&v.readyState<3&&lastProgressAt&&Date.now()-lastProgressAt>7000&&!stallLogged){stallLogged=true;log("INAWEZEKANA KUKWAMA (hakuna maendeleo >7s) katika "+time(v.currentTime));s.textContent="Inaonekana kusimama au kubuffer katika "+time(v.currentTime)}
+function details(){
+ var err=v.error;
+ $('state').textContent='readyState='+v.readyState+' | networkState='+v.networkState+(err?' | error='+err.code+' '+(err.message||''): '');
 }
-["loadstart","loadedmetadata","canplay","play","playing","pause","waiting","stalled","suspend","seeking","seeked","ended","error"].forEach(function(evt){
- v.addEventListener(evt,function(){
-  var detail=evt;
-  if(evt==="error"&&v.error)detail+=" code "+v.error.code;
-  log(detail);
-  if(evt==="waiting"||evt==="stalled"){s.textContent="Buffering/stalled karibu na "+time(v.currentTime)}
-  if(evt==="ended"){s.textContent="✓ Video imefika mwisho: "+time(v.currentTime)}
-  if(evt==="error"){s.textContent="Kosa la video: "+(v.error?v.error.code:"haijulikani")}
-  if(evt==="playing"){s.textContent="Inacheza katika "+time(v.currentTime)}
-  if(evt==="play"&&!startAt){startAt=Date.now();lastProgressAt=Date.now()}
-  show()
- })
+function update(){
+ $('time').textContent=clock(v.currentTime);$('duration').textContent=clock(v.duration);
+ $('wall').textContent=startAt?Math.floor((Date.now()-startAt)/1000)+' s':'0 s';
+ var ahead=0;
+ try{for(var i=0;i<v.buffered.length;i++){if(v.currentTime>=v.buffered.start(i)&&v.currentTime<=v.buffered.end(i)){ahead=v.buffered.end(i)-v.currentTime;break}}}catch(e){}
+ $('buffer').textContent=ahead.toFixed(1)+' s';details();
+ if(!v.paused&&!v.ended&&lastAt&&Date.now()-lastAt>8000&&!stalled){stalled=true;message('Hakuna maendeleo kwa zaidi ya sekunde 8 karibu na '+clock(v.currentTime));log('NO_PROGRESS >8s; readyState='+v.readyState)}
+}
+function progress(){
+ var now=v.currentTime,delta=now-lastTime;
+ if(!v.seeking&&delta>0&&delta<3){played+=delta;lastAt=Date.now();stalled=false}
+ lastTime=now;
+ if(played>=45&&!seeked&&!milestone){milestone=true;log('PLAYED_45S_WITHOUT_SEEK');message('Video hii imecheza zaidi ya sekunde 45. Iache ifike 1:10.')}
+ update();
+}
+function errorText(){
+ if(!v.error)return 'Chanzo hakijaanza; angalia taarifa hapa chini.';
+ var codes={1:'Upakiaji umesitishwa.',2:'Hitilafu ya mtandao wakati wa kupakia video.',3:'Video imepakiwa lakini decoder imeshindwa.',4:'Chanzo cha video kimekataliwa (format au upatikanaji).'};
+ return (codes[v.error.code]||'Hitilafu ya video.')+' Code '+v.error.code+'.';
+}
+function probe(){
+ if(pendingProbe){try{pendingProbe.abort()}catch(e){}}
+ var id=epoch,x=new XMLHttpRequest();pendingProbe=x;probeBusy=true;
+ $('network').textContent='Mtandao: inakagua bytes za mwanzo wa faili...';
+ try{x.open('GET',files[choice],true);x.setRequestHeader('Range','bytes=0-31');x.responseType='arraybuffer';x.timeout=12000}catch(e){probeBusy=false;$('network').textContent='Ukaguzi wa mtandao haupatikani: '+e.name;return}
+ x.onload=function(){
+  if(id!==epoch)return;probeBusy=false;pendingProbe=null;
+  var bytes=x.response?new Uint8Array(x.response):null,magic='';
+  if(bytes&&bytes.length>=8)for(var i=4;i<8;i++)magic+=String.fromCharCode(bytes[i]);
+  var type=x.getResponseHeader('Content-Type')||'haijulikani';
+  var ok=(x.status===200||x.status===206)&&magic==='ftyp';
+  $('network').className='small '+(ok?'good':'bad');
+  $('network').textContent='Mtandao: HTTP '+x.status+' | '+type+' | MP4 header='+(magic==='ftyp'?'SAHIHI':magic||'haijapatikana')+' | Range='+(x.getResponseHeader('Content-Range')||'haijaripotiwa');
+  log('FILE_CHECK HTTP='+x.status+' type='+type+' magic='+magic);
+ };
+ x.onerror=function(){if(id!==epoch)return;probeBusy=false;pendingProbe=null;$('network').textContent='Mtandao: faili halijafikiwa (XHR error).';log('FILE_CHECK_NETWORK_ERROR')};
+ x.ontimeout=function(){if(id!==epoch)return;probeBusy=false;pendingProbe=null;$('network').textContent='Mtandao: ombi la faili limezidi sekunde 12.';log('FILE_CHECK_TIMEOUT')};
+ x.send();
+}
+function select(which){
+ epoch++;if(pendingProbe){try{pendingProbe.abort()}catch(e){}pendingProbe=null}
+ v.pause();choice=which;startAt=0;lastAt=0;lastTime=0;played=0;seeked=false;stalled=false;milestone=false;
+ out.textContent='';$('network').className='small';
+ $('withAudio').setAttribute('aria-pressed',which===0?'true':'false');$('withoutAudio').setAttribute('aria-pressed',which===1?'true':'false');
+ $('source').textContent='Chanzo: '+labels[choice];$('direct').href=files[choice];
+ message('Inapakia taarifa. Bonyeza Cheza au play ndani ya video.');
+ v.src=files[choice];v.load();capabilities();log('R2_SOURCE '+files[choice]);update();probe();
+}
+['loadstart','loadedmetadata','canplay','play','playing','pause','waiting','stalled','suspend','seeking','seeked','ended','error'].forEach(function(name){
+ v.addEventListener(name,function(){
+  log(name+(v.error?' code='+v.error.code+' '+(v.error.message||''):''));
+  if(name==='loadedmetadata'){message('Video imetambuliwa: '+clock(v.duration)+'. Bonyeza Cheza.');log('DIMENSIONS '+v.videoWidth+'x'+v.videoHeight)}
+  if(name==='playing'){if(!startAt)startAt=Date.now();lastAt=Date.now();stalled=false;message('Inacheza. Lengo: 1:10 bila kusogeza muda.')}
+  if(name==='waiting')message('Inapakia sehemu inayofuata karibu na '+clock(v.currentTime));
+  if(name==='seeking'){seeked=true;log('SEEK: jaribio hili halitahesabiwa kama uchezaji mfululizo')}
+  if(name==='error')message(errorText());
+  if(name==='ended'){if(!seeked&&played>=65)message('IMEFIKA MWISHO: sekunde 70. Jaribio hili la MP4 limecheza; YouTube bado ni kipimo tofauti.');else message('Video imefika mwisho, lakini uchezaji mfululizo haujathibitishwa. Anza upya bila kusogeza muda.')}
+  update();
+ });
 });
-v.addEventListener("timeupdate",show);
-one("play").addEventListener("click",function(){
- if(v.paused){var q=v.play();if(q&&q.catch)q.catch(function(e){log("play rejected: "+e.name);s.textContent="Browser imekataa kuanza video"})}
- else v.pause()
+v.addEventListener('timeupdate',progress);
+$('play').addEventListener('click',function(){
+ if(v.error){message(errorText()+' Jaribu chaguo 2 bila sauti, au tuma picha ya taarifa.');details();return}
+ if(v.paused){try{var seq=epoch,p=v.play();if(p&&p.catch)p.catch(function(e){if(seq!==epoch)return;log('PLAY_REJECTED '+e.name+': '+(e.message||''));if(e.name==='NotAllowedError')message('Ruhusa ya kuanza imekataliwa. Bonyeza play ndani ya video.');else if(e.name==='NotSupportedError')message('Chanzo hiki kimekataliwa; si hitimisho kuhusu YouTube. '+errorText());else message('Kuanza kumeshindwa: '+e.name);details()})}catch(e){log('PLAY_THROW '+e.name);message('Kuanza kumeshindwa: '+e.name)}}else v.pause();
 });
-one("full").addEventListener("click",function(){
- var f=v.requestFullscreen||v.webkitRequestFullscreen;
- if(f){try{var q=f.call(v);if(q&&q.catch)q.catch(function(){log("Fullscreen imekataliwa")})}catch(e){log("Fullscreen imekataliwa")}}
- else {log("Fullscreen API haipo hapa");s.textContent="Fullscreen API haipo"}
+$('withAudio').addEventListener('click',function(){select(0)});$('withoutAudio').addEventListener('click',function(){select(1)});
+$('reload').addEventListener('click',function(){select(choice)});$('probe').addEventListener('click',probe);
+$('full').addEventListener('click',function(){
+ var fn=v.requestFullscreen||v.webkitRequestFullscreen||v.webkitEnterFullscreen;
+ if(!fn){log('FULLSCREEN_UNAVAILABLE');return}
+ try{var p=fn.call(v);if(p&&p.catch)p.catch(function(e){log('FULLSCREEN '+e.name)})}catch(e){log('FULLSCREEN '+e.name)}
 });
-one("clear").addEventListener("click",function(){out.textContent="";log("Taarifa zimefutwa")});
-one("reload").addEventListener("click",function(){location.reload()});
-setInterval(show,1000);
-log("Ukurasa umefunguka");
-show();
+document.addEventListener('keydown',function(e){
+ var k=e.keyCode||e.which;if(k<37||k>40||document.activeElement===v)return;
+ var nodes=document.querySelectorAll('button,a[href]'),items=[],active=document.activeElement;
+ for(var i=0;i<nodes.length;i++){var b=nodes[i].getBoundingClientRect();if(b.width&&b.height)items.push(nodes[i])}
+ if(!items.length)return;if(items.indexOf(active)<0){$('play').focus();e.preventDefault();return}
+ var r=active.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,best=null,score=Infinity;
+ items.forEach(function(el){if(el===active)return;var q=el.getBoundingClientRect(),dx=q.left+q.width/2-cx,dy=q.top+q.height/2-cy;if(k===37&&dx>=-5||k===39&&dx<=5||k===38&&dy>=-5||k===40&&dy<=5)return;var n=(k===37||k===39)?Math.abs(dx)+2*Math.abs(dy):Math.abs(dy)+2*Math.abs(dx);if(n<score){score=n;best=el}});
+ if(best){best.focus();e.preventDefault()}
+});
+setInterval(update,1000);select(0);
 })();
-</script>
-</body>
-</html>
+</script></body></html>
