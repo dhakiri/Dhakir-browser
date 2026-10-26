@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta name="theme-color" content="#091321">
+<title>Dhakir Browser TV v0.3 | VIDAA</title>
+<style>
+*{box-sizing:border-box}
+html{background:#08111e}
+body{margin:0;min-height:100vh;font-family:Arial,Helvetica,sans-serif;color:#ecf8fc;background:radial-gradient(ellipse at 90% 0%,rgba(5,147,171,.21),transparent 37%),radial-gradient(ellipse at 8% 100%,rgba(72,89,168,.17),transparent 43%),#091321}
+.shell{max-width:1680px;width:94%;margin:0 auto;padding:20px 0}
+header{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:5px 0 21px;border-bottom:1px solid #254159}
+.brand{display:flex;gap:16px;align-items:center;font-size:28px;font-weight:bold}
+.emblem{border-radius:17px;display:flex;align-items:center;justify-content:center;background:linear-gradient(130deg,#1cc5dc,#4269d9);height:57px;width:57px;font-size:36px;color:#fff}
+.edition{font-size:18px;color:#9ddde9;border-radius:24px;padding:12px 20px;border:1px solid #35576b;background:#10283c}
+main{padding-top:25px}
+.tiny{font-weight:bold;font-size:16px;letter-spacing:1.5px;color:#81dbe7;margin-bottom:8px}
+h1{font-size:43px;letter-spacing:-1px;line-height:1.13;margin:0 0 9px}
+.lead{font-size:20px;color:#b3c6d5;margin:0 0 20px;line-height:1.35}
+form{display:flex;flex-wrap:nowrap;gap:10px;align-items:stretch;padding:9px;border:2px solid #426177;background:#14273b;border-radius:18px}
+form input{flex:1;min-width:140px;border:0;padding:16px 20px;background:transparent;color:#f7fdff;font-size:24px}
+form input::placeholder{color:#94a9b9}
+form:focus-within{border-color:#8be5eb}
+button{cursor:pointer;border:0;border-radius:12px;background:#5fe1e6;color:#082431;padding:16px 22px;font-size:19px;font-weight:bold;font-family:inherit}
+button.dim{background:#263f55;color:#e1f2f7}
+button.low{font-size:16px;padding:10px 16px;background:#1c354a;color:#c7e3ef;border:1px solid #395a71}
+button.low:hover,button.dim:hover{background:#345a72}
+a:focus,button:focus,input:focus{outline:4px solid #ffd05a;outline-offset:3px}
+input:focus{outline:0}
+#status{font-size:17px;min-height:25px;color:#a6c6d2;margin:12px 3px 8px}
+.top-buttons{display:flex;gap:9px;flex-wrap:wrap}
+.block-head{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:21px 0 12px}
+h2{margin:0;font-size:25px}
+.tip{font-size:15px;color:#8faebe}
+.quick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.tile{display:block;text-decoration:none;color:#effdff;padding:20px;border:1px solid #38576b;border-radius:18px;background:#142a40;min-height:134px}
+.tile:hover{background:#20425b;border-color:#8ee3e8}
+.tile .icon{display:inline-flex;border-radius:12px;justify-content:center;align-items:center;height:46px;width:46px;font-size:26px;font-weight:bold;margin-bottom:10px;background:#305779}
+.tile.youtube .icon{background:#823449}
+.tile.fawa .icon{background:#276350}
+.tile.bbc .icon{background:#554e8b}
+.tile strong{font-size:22px;display:block}
+.tile small{font-size:15px;color:#b6c7d7;margin-top:5px;display:block}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:19px}
+.panel{min-width:0;border:1px solid #314e64;background:rgba(17,35,54,.91);border-radius:18px;padding:17px}
+.paneltop{display:flex;justify-content:space-between;align-items:center;gap:8px;padding-bottom:10px}
+.paneltop h2{font-size:21px}
+.count{color:#8fc6d8;font-size:16px}
+.entries{max-height:210px;overflow-y:auto}
+.entry{display:flex;gap:8px;align-items:center;margin:7px 0}
+.entry a{min-width:0;flex:1;text-decoration:none;color:#e0f3f8;background:#21394e;font-size:17px;padding:13px;border-radius:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.entry a:hover{background:#34556e}
+.entry button{background:#3a3045;color:#ffd5e2;padding:11px 15px}
+.empty{color:#9eb4c4;font-size:17px;margin:10px 0;line-height:1.5}
+.bottom{font-size:14px;line-height:1.55;color:#91afc2;border-top:1px solid #284258;margin-top:21px;padding-top:13px}
+.hidden{display:none!important}
+.popup{background:#183049;border:1px solid #53819b;padding:19px;border-radius:17px;margin:13px 0 4px;color:#d4e7f0;font-size:17px;line-height:1.6}
+.popup strong{color:#91f1f4}
+.popup p{margin:0}
+.popup button{margin-top:10px}
+.settings-row{display:flex;gap:10px;align-items:center;margin:12px 0;flex-wrap:wrap}
+.check{color:#c3dbea;font-size:17px}
+.zoomed{font-size:110%}
+.zoomed h1{font-size:46px}.zoomed button{font-size:21px}.zoomed .tile strong{font-size:24px}
+@media(max-width:900px){.quick{grid-template-columns:repeat(2,minmax(0,1fr))}.cols{grid-template-columns:1fr}.edition{font-size:13px}.shell{width:93%}h1{font-size:36px}form{flex-wrap:wrap}form input{flex-basis:100%}form button{flex:1}}
+@media(max-width:510px){.quick{grid-template-columns:1fr}.brand{font-size:20px}.emblem{width:47px;height:47px}.edition{padding:7px;font-size:11px}.tile{min-height:115px}.lead{font-size:17px}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header>
+ <div class="brand"><span class="emblem">D</span><span>Dhakir Browser <span style="color:#78d9e7">TV</span></span></div>
+ <div class="edition">VIDAA Edition · v0.3</div>
+</header>
+<main>
+<section>
+ <div class="tiny">BROWSER HOME · HISENSE SMART TV</div>
+ <h1>Fungua tovuti kwa urahisi.</h1>
+ <p class="lead">Andika URL au tafuta kwa Google. Tumia mishale na OK kwenye remote ya TV.</p>
+ <form id="addressform" autocomplete="off">
+  <input id="address" aria-label="Andika URL au neno la kutafuta" type="text" maxlength="350" spellcheck="false" placeholder="URL au neno la kutafuta...">
+  <button type="submit" id="openBtn">Fungua</button>
+  <button type="button" id="bookmarkBtn" class="dim">★ Hifadhi</button>
+ </form>
+ <div id="status" role="status" aria-live="polite">Mfano: google.com au habari za leo. Kurudi hapa kutoka tovuti, tumia Back ya remote.</div>
+ <div class="top-buttons">
+  <button type="button" class="low" id="helpBtn">? Maelekezo</button>
+  <button type="button" class="low" id="settingsBtn">⚙ Mipangilio</button>
+  <button type="button" class="low" id="reloadBtn">↻ Sasisha</button>
+  <button type="button" class="low" id="testBtn">✓ Kagua TV</button>
+ </div>
+ <div id="helpPanel" class="popup hidden">
+  <p><strong>Remote:</strong> ↑ ↓ ← → kuchagua, OK kufungua, Back kurudi kutoka tovuti au fullscreen.<br>
+  <strong>★ Hifadhi:</strong> andika URL (mfano youtube.com), kisha Hifadhi.<br>
+  <strong>Kumbuka:</strong> Huu ni ukurasa wa mwanzo; tovuti na video zinafunguliwa na browser iliyopo kwenye VIDAA.</p>
+  <button type="button" class="low" id="closeHelp">Funga</button>
+ </div>
+ <div id="settingsPanel" class="popup hidden">
+  <p><strong>Mipangilio ya Dhakir Browser TV</strong></p>
+  <div class="settings-row"><button type="button" class="low" id="fontBtn">A+ Maandishi makubwa: Zima</button><span class="check">Hifadhi kwenye TV hii pekee.</span></div>
+  <p>Hifadhi na orodha ya tovuti hazihamishwi kwenye vifaa vingine. Hakuna private tab halisi kwenye toleo hili.</p>
+  <button type="button" class="low" id="closeSettings">Funga</button>
+ </div>
+ <div id="testPanel" class="popup hidden"></div>
+</section>
+<section>
+ <div class="block-head"><h2>Tovuti za haraka</h2><span class="tip">Mishale + OK</span></div>
+ <div class="quick">
+  <a class="tile" href="https://www.google.com/"><span class="icon">G</span><strong>Google</strong><small>Utafutaji</small></a>
+  <a class="tile youtube" href="https://www.youtube.com/"><span class="icon">▶</span><strong>YouTube</strong><small>Video na vipindi</small></a>
+  <a class="tile bbc" href="https://www.bbc.com/swahili"><span class="icon">N</span><strong>Habari</strong><small>BBC Swahili</small></a>
+  <a class="tile fawa" href="https://www.fawanews.sc/"><span class="icon">F</span><strong>FawaNews</strong><small>Michezo na video</small></a>
+ </div>
+</section>
+<section class="cols">
+ <div class="panel">
+  <div class="paneltop"><h2>★ Viungo ulivyohifadhi</h2><span class="count" id="favCount"></span></div>
+  <div class="entries" id="favorites"></div>
+ </div>
+ <div class="panel">
+  <div class="paneltop"><h2>↺ Ulivyofungua hapa</h2><button id="clearRecent" type="button" class="low">Futa orodha</button></div>
+  <div class="entries" id="recent"></div>
+ </div>
+</section>
+</main>
+<footer class="bottom">Dhakir Browser TV v0.3 · Ni ukurasa wa kuanzia unaotumia browser ya Hisense VIDAA. Orodha ya hivi karibuni si history kamili ya TV. Video, fullscreen, matangazo na private mode vinategemea browser na tovuti husika. Hosted test version, not an installed VIDAA app.</footer>
+</div>
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id)};
+var address=$("address"),status=$("status"),bookmarks=$("favorites"),recentBox=$("recent");
+var favKey="dhakir-vidaa-favs-01",recentKey="dhakir-vidaa-recent-02",fontKey="dhakir-vidaa-large-03";
+function msg(s){status.textContent=s}
+function read(key){
+ try{var v=JSON.parse(localStorage.getItem(key)||"[]");if(v&&v instanceof Array){return v.filter(function(x){return typeof x==="string"&&/^https?:\/\//i.test(x)}).slice(0,8)}}catch(e){}
+ return []
+}
+function save(key,v){try{localStorage.setItem(key,JSON.stringify(v));return true}catch(e){return false}}
+var fav=read(favKey),recent=read(recentKey);
+function parse(raw){
+ var str=String(raw||"").replace(/^\s+|\s+$/g,"");if(!str)return null;
+ if(/^[a-z][a-z0-9+.-]*:/i.test(str)&&!/^https?:\/\//i.test(str))return null;
+ if(/^https?:\/\//i.test(str)){
+  try{var u=new URL(str);return u.hostname&&(u.protocol==="http:"||u.protocol==="https:")?u.href:null}catch(e){return null}
+ }
+ if(/^[a-z0-9-]+(\.[a-z0-9-]+)+(:[0-9]{1,5})?(\/[^\s]*)?$/i.test(str))return "https://"+str;
+ return "https://www.google.com/search?q="+encodeURIComponent(str)
+}
+function site(str){return /^https?:\/\//i.test(str)||/^[a-z0-9-]+(\.[a-z0-9-]+)+(:[0-9]{1,5})?(\/[^\s]*)?$/i.test(str)}
+function hostname(url){try{return new URL(url).hostname.replace(/^www\./i,"")}catch(e){return url}}
+function open(url){
+ if(!/^https?:\/\//i.test(url)){msg("Anwani si sahihi");return}
+ recent=recent.filter(function(u){return u!==url});recent.unshift(url);recent=recent.slice(0,8);
+ save(recentKey,recent);msg("Inafungua "+hostname(url)+"...");
+ window.location.assign(url)
+}
+function row(url,into,remove){
+ var element=document.createElement("div"),a=document.createElement("a");
+ element.className="entry";a.href=url;a.textContent=hostname(url);a.title=url;
+ a.addEventListener("click",function(e){e.preventDefault();open(url)});
+ element.appendChild(a);
+ if(remove){
+  var b=document.createElement("button");b.type="button";b.textContent="×";b.title="Ondoa "+hostname(url);
+  b.setAttribute("aria-label","Ondoa "+hostname(url));
+  b.addEventListener("click",function(){fav=fav.filter(function(v){return v!==url});save(favKey,fav);render();msg("Kiungo kimeondolewa.")});
+  element.appendChild(b)
+ }
+ into.appendChild(element)
+}
+function render(){
+ bookmarks.textContent="";recentBox.textContent="";
+ $("favCount").textContent=fav.length+"/8";
+ if(!fav.length){var p=document.createElement("p");p.className="empty";p.textContent="Andika URL hapo juu, kisha bonyeza ★ Hifadhi.";bookmarks.appendChild(p)}
+ fav.forEach(function(u){row(u,bookmarks,true)});
+ if(!recent.length){var q=document.createElement("p");q.className="empty";q.textContent="Tovuti unazofungua kutoka ukurasa huu zitaonekana hapa.";recentBox.appendChild(q)}
+ recent.forEach(function(u){row(u,recentBox,false)})
+}
+$("addressform").addEventListener("submit",function(e){e.preventDefault();var u=parse(address.value);if(u)open(u);else msg("Andika URL halali au neno la kutafuta.")});
+$("bookmarkBtn").addEventListener("click",function(){
+ var v=address.value.replace(/^\s+|\s+$/g,"");
+ if(!site(v)){msg("Ili kuhifadhi, andika URL halali, mfano google.com.");return}
+ var u=parse(v);if(!u){msg("URL si sahihi.");return}
+ fav=fav.filter(function(x){return x!==u});fav.unshift(u);fav=fav.slice(0,8);
+ var ok=save(favKey,fav);render();msg(ok?"Kiungo kimehifadhiwa kwenye TV.":"Kiungo kipo kwa muda; browser haijaruhusu hifadhi.")
+});
+$("clearRecent").addEventListener("click",function(){recent=[];save(recentKey,recent);render();msg("Orodha ya ndani imefutwa; history ya browser ya VIDAA haijafutwa.")});
+function show(id,visible){$(id).className=visible?"popup":"popup hidden"}
+function toggle(id){show(id,$(id).className.indexOf("hidden")>=0);var el=$(id);if(el.className.indexOf("hidden")<0){el.scrollIntoView(false)}}
+function hidePopups(){show("helpPanel",false);show("settingsPanel",false);show("testPanel",false)}
+$("helpBtn").addEventListener("click",function(){show("settingsPanel",false);show("testPanel",false);toggle("helpPanel")});
+$("settingsBtn").addEventListener("click",function(){show("helpPanel",false);show("testPanel",false);toggle("settingsPanel")});
+$("closeHelp").addEventListener("click",function(){show("helpPanel",false);$("helpBtn").focus()});
+$("closeSettings").addEventListener("click",function(){show("settingsPanel",false);$("settingsBtn").focus()});
+$("reloadBtn").addEventListener("click",function(){location.reload()});
+function fontChange(v){
+ document.body.className=v?"zoomed":"";
+ $("fontBtn").textContent=v?"A+ Maandishi makubwa: Washa":"A+ Maandishi makubwa: Zima";
+ try{localStorage.setItem(fontKey,v?"1":"0")}catch(e){}
+}
+var isLarge=false;try{isLarge=localStorage.getItem(fontKey)==="1"}catch(e){}
+fontChange(isLarge);
+$("fontBtn").addEventListener("click",function(){isLarge=!isLarge;fontChange(isLarge)});
+$("testBtn").addEventListener("click",function(){
+ show("helpPanel",false);show("settingsPanel",false);
+ var storage=false;try{localStorage.setItem("dhakir-v03-test","1");storage=localStorage.getItem("dhakir-v03-test")==="1";localStorage.removeItem("dhakir-v03-test")}catch(e){}
+ var full=!!(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen);
+ var p=$("testPanel");p.textContent="";
+ var t=document.createElement("p");t.textContent="Ukaguzi wa TV: Hifadhi ya ndani "+(storage?"IPO":"HAIPATIKANI")+" · Fullscreen API "+(full?"ipo (inategemea tovuti)":"haijapatikana")+" · Skrini "+screen.width+"×"+screen.height+".";
+ p.appendChild(t);
+ var b=document.createElement("button");b.type="button";b.className="low";b.textContent="Funga";b.addEventListener("click",function(){show("testPanel",false);$("testBtn").focus()});p.appendChild(b);
+ show("testPanel",true);p.scrollIntoView(false)
+});
+Array.prototype.forEach.call(document.querySelectorAll(".tile"),function(a){a.addEventListener("click",function(e){e.preventDefault();open(a.href)})});
+document.addEventListener("keydown",function(e){
+ var key=e.keyCode||e.which;
+ if(key===27||key===461||key===8){
+  if((document.activeElement||{}).tagName==="INPUT"&&key===8)return;
+  if($("helpPanel").className.indexOf("hidden")<0||$("settingsPanel").className.indexOf("hidden")<0||$("testPanel").className.indexOf("hidden")<0){hidePopups();$("helpBtn").focus();e.preventDefault()}
+  return
+ }
+ if(key!==37&&key!==38&&key!==39&&key!==40)return;
+ var current=document.activeElement;
+ if(current&&(current.tagName==="INPUT"||current.tagName==="TEXTAREA"))return;
+ var all=document.querySelectorAll("a[href],button,input"),items=[];
+ for(var i=0;i<all.length;i++){var el=all[i],rc=el.getBoundingClientRect();if(rc.width>0&&rc.height>0)items.push(el)}
+ if(!items.length)return;
+ if(items.indexOf(current)<0){items[0].focus();e.preventDefault();return}
+ var r=current.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2,winner=null,best=1e20;
+ items.forEach(function(el){
+  if(el===current)return;
+  var t=el.getBoundingClientRect(),dx=t.left+t.width/2-x,dy=t.top+t.height/2-y;
+  if(key===37&&dx>=-5||key===39&&dx<=5||key===38&&dy>=-5||key===40&&dy<=5)return;
+  var primary=key===37||key===39?Math.abs(dx):Math.abs(dy);
+  var secondary=key===37||key===39?Math.abs(dy):Math.abs(dx);
+  var score=primary+secondary*2.2;
+  if(score<best){winner=el;best=score}
+ });
+ if(winner){winner.focus();if(winner.scrollIntoView)winner.scrollIntoView({block:"nearest",inline:"nearest"});e.preventDefault()}
+});
+render();
+})();
+</script>
+</body>
+</html>
