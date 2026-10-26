@@ -90,6 +90,7 @@ h2{margin:0;font-size:25px}
   <button type="button" class="low" id="settingsBtn">⚙ Mipangilio</button>
   <button type="button" class="low" id="reloadBtn">↻ Sasisha</button>
   <button type="button" class="low" id="testBtn">✓ Kagua TV</button>
+  <button type="button" class="low" id="videoDiagBtn">▶ Jaribu Video</button>
  </div>
  <div id="helpPanel" class="popup hidden">
   <p><strong>Remote:</strong> ↑ ↓ ← → kuchagua, OK kufungua, Back kurudi kutoka tovuti au fullscreen.<br>
@@ -195,6 +196,7 @@ $("settingsBtn").addEventListener("click",function(){show("helpPanel",false);sho
 $("closeHelp").addEventListener("click",function(){show("helpPanel",false);$("helpBtn").focus()});
 $("closeSettings").addEventListener("click",function(){show("settingsPanel",false);$("settingsBtn").focus()});
 $("reloadBtn").addEventListener("click",function(){location.reload()});
+$("videoDiagBtn").addEventListener("click",function(){location.assign("./video-test.html")});
 function fontChange(v){
  document.body.className=v?"zoomed":"";
  $("fontBtn").textContent=v?"A+ Maandishi makubwa: Washa":"A+ Maandishi makubwa: Zima";
