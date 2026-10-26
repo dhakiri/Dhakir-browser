@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="sw">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#091321">
+<title>Dhakir TV | Ukaguzi wa Video</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#091321;color:#ecf8ff;font-family:Arial,Helvetica,sans-serif;min-height:100vh}
+main{width:94%;max-width:1350px;margin:auto;padding:24px 0}
+h1{font-size:38px;margin:8px 0}
+h2{font-size:24px;margin:20px 0 12px}
+p{font-size:19px;color:#adcad8;line-height:1.45}
+header{display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid #33526b;padding-bottom:12px}
+a,button{font-size:19px;border-radius:12px;text-decoration:none;cursor:pointer}
+a{color:#7bdfec}
+button{border:1px solid #366b7d;background:#14556b;color:#fff;padding:14px 22px;margin:3px}
+a:focus,button:focus,video:focus{outline:5px solid #ffd54f;outline-offset:5px}
+video{width:100%;height:auto;max-height:57vh;object-fit:contain;background:#000;border:2px solid #33536e;border-radius:12px}
+.controls{display:flex;flex-wrap:wrap;margin:11px 0 12px;gap:4px}
+.panel{padding:14px 20px;border:1px solid #35546d;border-radius:12px;background:#172c40}
+.status{font-size:22px;color:#b6f0e8}
+.metrics{display:flex;gap:25px;flex-wrap:wrap;padding:12px 0}
+.metrics div{min-width:140px}
+.metrics strong{font-size:28px;color:#79deeb}
+.metrics small{display:block;font-size:15px;color:#a7bfd1}
+#events{white-space:pre-wrap;word-break:break-word;font:17px/1.6 Consolas,monospace;color:#b9d8e8;max-height:210px;overflow-y:auto;margin:0}
+.tip{font-size:17px;color:#adc4d1}
+.note{font-size:16px;color:#97b1c5}
+</style>
+</head>
+<body>
+<main>
+<header><div><h1>Dhakir TV — Ukaguzi wa Video</h1><p style="margin:0">Jaribio la HTML5 MP4, si YouTube</p></div><a href="./index.html">← Rudi Dhakir</a></header>
+<h2>Cheza video kamili ya takribani sekunde 52</h2>
+<p>Bonyeza <b>Cheza</b> kisha angalia kama inafika mwisho. Hiki ni kipimo cha browser na mtandao, hakitoi udhibiti wa video za YouTube.</p>
+<video id="video" preload="metadata" controls playsinline tabindex="0" poster="https://media.w3.org/2010/05/sintel/poster.png">
+ <source src="https://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+ Browser haiwezi kucheza HTML5 video.
+</video>
+<div class="controls">
+<button type="button" id="play">▶ Cheza / Simamisha</button>
+<button type="button" id="full">⛶ Fullscreen</button>
+<button type="button" id="clear">Futa taarifa</button>
+<button type="button" id="reload">↻ Jaribu tena</button>
+</div>
+<div class="panel">
+<div id="status" class="status">Tayari kwa kujaribu.</div>
+<div class="metrics">
+<div><strong id="time">0:00</strong><small>Muda wa video</small></div>
+<div><strong id="duration">—</strong><small>Urefu wa video</small></div>
+<div><strong id="wall">0 s</strong><small>Sekunde tangu Cheza</small></div>
+<div><strong id="buffer">—</strong><small>Video iliyopakiwa</small></div>
+</div>
+<p class="tip" id="hint">Ukifika 0:45 au mwisho bila kusimama, jaribio hili la MP4 limepita zaidi ya sekunde 39.</p>
+<h2>Matukio ya player</h2>
+<pre id="events"></pre>
+</div>
+<p class="note">Chanzo: W3C Sintel MP4 (H.264/AAC). Ripoti hizi zinabaki ndani ya ukurasa wa TV; hazitumwi kwa seva ya Dhakir. Tovuti ya YouTube ina player yake tofauti, kwa hiyo matokeo yake yanaweza kutofautiana.</p>
+</main>
+<script>
+(function(){
+"use strict";
+var v=document.getElementById("video"),s=document.getElementById("status"),out=document.getElementById("events");
+var startAt=0,lastTime=0,lastProgressAt=0,stallLogged=false,over39=false;
+function one(n){return document.getElementById(n)}
+function time(n){if(!isFinite(n))return "—";n=Math.floor(n);return Math.floor(n/60)+":"+("0"+(n%60)).slice(-2)}
+function log(t){
+ var line="["+time(v.currentTime)+"] "+t+"\n";
+ out.textContent=(line+out.textContent).slice(0,2800)
+}
+function show(){
+ one("time").textContent=time(v.currentTime);
+ one("duration").textContent=time(v.duration);
+ one("wall").textContent=startAt?(Math.round((Date.now()-startAt)/1000)+" s"):"0 s";
+ try{one("buffer").textContent=v.buffered.length?time(v.buffered.end(v.buffered.length-1)):"—"}catch(e){}
+ if(v.currentTime>lastTime+.2){lastTime=v.currentTime;lastProgressAt=Date.now();stallLogged=false}
+ if(v.currentTime>=45&&!over39){over39=true;s.textContent="✓ Video imevuka sekunde 45 — hakuna kukatika kwa mpaka wa sekunde 39 kwenye jaribio hili.";log("IMEVUKA SEKUNDE 45")}
+ if(!v.paused&&!v.ended&&v.readyState<3&&lastProgressAt&&Date.now()-lastProgressAt>7000&&!stallLogged){stallLogged=true;log("INAWEZEKANA KUKWAMA (hakuna maendeleo >7s) katika "+time(v.currentTime));s.textContent="Inaonekana kusimama au kubuffer katika "+time(v.currentTime)}
+}
+["loadstart","loadedmetadata","canplay","play","playing","pause","waiting","stalled","suspend","seeking","seeked","ended","error"].forEach(function(evt){
+ v.addEventListener(evt,function(){
+  var detail=evt;
+  if(evt==="error"&&v.error)detail+=" code "+v.error.code;
+  log(detail);
+  if(evt==="waiting"||evt==="stalled"){s.textContent="Buffering/stalled karibu na "+time(v.currentTime)}
+  if(evt==="ended"){s.textContent="✓ Video imefika mwisho: "+time(v.currentTime)}
+  if(evt==="error"){s.textContent="Kosa la video: "+(v.error?v.error.code:"haijulikani")}
+  if(evt==="playing"){s.textContent="Inacheza katika "+time(v.currentTime)}
+  if(evt==="play"&&!startAt){startAt=Date.now();lastProgressAt=Date.now()}
+  show()
+ })
+});
+v.addEventListener("timeupdate",show);
+one("play").addEventListener("click",function(){
+ if(v.paused){var q=v.play();if(q&&q.catch)q.catch(function(e){log("play rejected: "+e.name);s.textContent="Browser imekataa kuanza video"})}
+ else v.pause()
+});
+one("full").addEventListener("click",function(){
+ var f=v.requestFullscreen||v.webkitRequestFullscreen;
+ if(f){try{var q=f.call(v);if(q&&q.catch)q.catch(function(){log("Fullscreen imekataliwa")})}catch(e){log("Fullscreen imekataliwa")}}
+ else {log("Fullscreen API haipo hapa");s.textContent="Fullscreen API haipo"}
+});
+one("clear").addEventListener("click",function(){out.textContent="";log("Taarifa zimefutwa")});
+one("reload").addEventListener("click",function(){location.reload()});
+setInterval(show,1000);
+log("Ukurasa umefunguka");
+show();
+})();
+</script>
+</body>
+</html>
