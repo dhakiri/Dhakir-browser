@@ -236,6 +236,11 @@ $("testBtn").addEventListener("click",function(){
  var p=$("testPanel");p.textContent="";
  var t=document.createElement("p");t.textContent="Ukaguzi wa TV: Hifadhi ya ndani "+(storage?"IPO":"HAIPATIKANI")+" · Fullscreen API "+(full?"ipo (inategemea tovuti)":"haijapatikana")+" · Skrini "+screen.width+"×"+screen.height+" · YouTube Bridge: Samsung S25 Ultra ("+getBridgeIp()+":8766).";
  p.appendChild(t);
+ var hasInstall=typeof Hisense_installApp==="function",hasRegistry=typeof HiUtils_createRequest==="function",hasOmi=false,regStatus=hasRegistry?"HAIJASOMWA":"HAIPO",regCount="",osv="";
+ try{hasOmi=(typeof omi_platform!=="undefined"&&omi_platform&&typeof omi_platform.sendPlatformMessage==="function")||(typeof opera_omi!=="undefined"&&opera_omi&&typeof opera_omi.sendPlatformMessage==="function")}catch(e){}
+ try{if(typeof Hisense_GetOSVersion==="function")osv=String(Hisense_GetOSVersion())}catch(e){}
+ if(hasRegistry){try{var rr=HiUtils_createRequest("fileRead",{path:"websdk/Appinfo.json",mode:6});if(rr&&rr.ret){regStatus="OK";try{var rp=JSON.parse(rr.msg||"{}");if(rp&&rp.AppInfo instanceof Array)regCount=" ("+rp.AppInfo.length+" apps)"}catch(e){}}else regStatus="IMEKATAA"}catch(e){regStatus="ERROR"}}
+ var pi=document.createElement("p");pi.style.marginTop="12px";pi.textContent="Installer probe (read-only): Hisense_installApp="+(hasInstall?"IPO":"HAIPO")+" · HiUtils_createRequest="+(hasRegistry?"IPO":"HAIPO")+" · Registry read="+regStatus+regCount+" · omi_platform="+(hasOmi?"IPO":"HAIPO")+(osv?" · OS="+osv:"");p.appendChild(pi);
  var b=document.createElement("button");b.type="button";b.className="low";b.textContent="Funga";b.addEventListener("click",function(){show("testPanel",false);$("testBtn").focus()});p.appendChild(b);
  show("testPanel",true);p.scrollIntoView(false)
 });
