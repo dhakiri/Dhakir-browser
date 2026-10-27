@@ -212,7 +212,8 @@ $("testBtn").addEventListener("click",function(){
  var storage=false;try{localStorage.setItem("dhakir-v03-test","1");storage=localStorage.getItem("dhakir-v03-test")==="1";localStorage.removeItem("dhakir-v03-test")}catch(e){}
  var full=!!(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen);
  var p=$("testPanel");p.textContent="";
- var t=document.createElement("p");t.textContent="Ukaguzi wa TV: Hifadhi ya ndani "+(storage?"IPO":"HAIPATIKANI")+" · Fullscreen API "+(full?"ipo (inategemea tovuti)":"haijapatikana")+" · Skrini "+screen.width+"×"+screen.height+".";
+ var nativeNames=["Hisense_launchAppViaName","Hisense_launchAppViaUri","Hisense_StartApp"],native=[];nativeNames.forEach(function(n){var f=window[n];native.push(n+"="+(typeof f)+(typeof f==="function"?"(args:"+f.length+")":""))});
+ var t=document.createElement("p");t.textContent="Ukaguzi wa TV: Hifadhi ya ndani "+(storage?"IPO":"HAIPATIKANI")+" · Fullscreen API "+(full?"ipo (inategemea tovuti)":"haijapatikana")+" · Skrini "+screen.width+"×"+screen.height+". Native APIs: "+native.join(" · ");
  p.appendChild(t);
  var b=document.createElement("button");b.type="button";b.className="low";b.textContent="Funga";b.addEventListener("click",function(){show("testPanel",false);$("testBtn").focus()});p.appendChild(b);
  show("testPanel",true);p.scrollIntoView(false)
