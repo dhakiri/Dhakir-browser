@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta name="theme-color" content="#091321">
-<title>Dhakir Browser TV v0.3 | VIDAA</title>
+<title>Dhakir Browser TV v0.4 | VIDAA</title>
 <style>
 *{box-sizing:border-box}
 html{background:#08111e}
@@ -67,13 +67,21 @@ h2{margin:0;font-size:25px}
 .zoomed h1{font-size:46px}.zoomed button{font-size:21px}.zoomed .tile strong{font-size:24px}
 @media(max-width:900px){.quick{grid-template-columns:repeat(2,minmax(0,1fr))}.cols{grid-template-columns:1fr}.edition{font-size:13px}.shell{width:93%}h1{font-size:36px}form{flex-wrap:wrap}form input{flex-basis:100%}form button{flex:1}}
 @media(max-width:510px){.quick{grid-template-columns:1fr}.brand{font-size:20px}.emblem{width:47px;height:47px}.edition{padding:7px;font-size:11px}.tile{min-height:115px}.lead{font-size:17px}}
+
+#loadingLayer{position:fixed;inset:0;z-index:9999;background:rgba(5,14,25,.88);display:flex;align-items:center;justify-content:center;padding:30px}
+.loading-card{min-width:360px;max-width:680px;text-align:center;background:#132c43;border:1px solid #5d93aa;border-radius:24px;padding:34px;box-shadow:0 24px 80px rgba(0,0,0,.45)}
+.loader-ring{width:72px;height:72px;border:7px solid #294a61;border-top-color:#64dce6;border-radius:50%;margin:0 auto 20px;animation:dhakirSpin .8s linear infinite}
+#loadingTitle{font-size:28px;font-weight:bold;color:#f2fdff}#loadingDetail{font-size:18px;color:#a9cad8;margin-top:8px;word-break:break-word}
+button.refresh{background:#315f78;color:#eaffff;border:1px solid #64dce6}
+@keyframes dhakirSpin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
+<div id="loadingLayer" class="hidden" role="status" aria-live="polite"><div class="loading-card"><div class="loader-ring"></div><div id="loadingTitle">Inafungua...</div><div id="loadingDetail"></div></div></div>
 <div class="shell">
 <header>
  <div class="brand"><span class="emblem">D</span><span>Dhakir Browser <span style="color:#78d9e7">TV</span></span></div>
- <div class="edition">VIDAA Edition · v0.3</div>
+ <div class="edition">VIDAA Edition · v0.4</div>
 </header>
 <main>
 <section>
@@ -89,7 +97,7 @@ h2{margin:0;font-size:25px}
  <div class="top-buttons">
   <button type="button" class="low" id="helpBtn">? Maelekezo</button>
   <button type="button" class="low" id="settingsBtn">⚙ Mipangilio</button>
-  <button type="button" class="low" id="reloadBtn">↻ Sasisha</button>
+  <button type="button" class="low refresh" id="reloadBtn">↻ Sasisha</button>
   <button type="button" class="low" id="testBtn">✓ Kagua TV</button>
   <button type="button" class="low" id="videoDiagBtn">▶ Jaribu Video</button>
  </div>
@@ -137,6 +145,7 @@ var $=function(id){return document.getElementById(id)};
 var address=$("address"),status=$("status"),bookmarks=$("favorites"),recentBox=$("recent");
 var favKey="dhakir-vidaa-favs-01",recentKey="dhakir-vidaa-recent-02",fontKey="dhakir-vidaa-large-03",bridgeKey="dhakir-vidaa-bridge-ip-01",defaultBridgeIp="10.181.192.210";
 function msg(s){status.textContent=s}
+var loadingTimer=null;function hideLoading(){if(loadingTimer){clearTimeout(loadingTimer);loadingTimer=null}show("loadingLayer",false)}function showLoading(title,detail){$("loadingTitle").textContent=title||"Inafungua...";$("loadingDetail").textContent=detail||"";show("loadingLayer",true);loadingTimer=setTimeout(hideLoading,8000)}
 function validBridgeIp(v){var m=String(v||"").replace(/^\s+|\s+$/g,"");if(!/^(?:\d{1,3}\.){3}\d{1,3}$/.test(m))return null;var a=m.split(".");for(var i=0;i<4;i++){var n=+a[i];if(n<0||n>255)return null}return m}
 function getBridgeIp(){try{return validBridgeIp(localStorage.getItem(bridgeKey))||defaultBridgeIp}catch(e){return defaultBridgeIp}}
 function bridgeUrl(path){return "http://"+getBridgeIp()+":8766"+path}
@@ -161,8 +170,8 @@ function hostname(url){try{return new URL(url).hostname.replace(/^www\./i,"")}ca
 function open(url){
  if(!/^https?:\/\//i.test(url)){msg("Anwani si sahihi");return}
  recent=recent.filter(function(u){return u!==url});recent.unshift(url);recent=recent.slice(0,8);
- save(recentKey,recent);msg("Inafungua "+hostname(url)+"...");
- window.location.assign(url)
+ save(recentKey,recent);msg("Inafungua "+hostname(url)+"...");showLoading("Inafungua...",hostname(url));
+ setTimeout(function(){window.location.assign(url)},80)
 }
 function row(url,into,remove){
  var element=document.createElement("div"),a=document.createElement("a");
@@ -200,11 +209,11 @@ function hidePopups(){show("helpPanel",false);show("settingsPanel",false);show("
 $("helpBtn").addEventListener("click",function(){show("settingsPanel",false);show("testPanel",false);toggle("helpPanel")});
 $("settingsBtn").addEventListener("click",function(){show("helpPanel",false);show("testPanel",false);toggle("settingsPanel")});
 $("saveBridgeIp").addEventListener("click",function(){var ip=validBridgeIp($("bridgeIp").value);if(!ip){msg("Bridge IP si sahihi.");return}try{localStorage.setItem(bridgeKey,ip)}catch(e){}applyBridgeIp();msg("Bridge IP imehifadhiwa: "+ip)});
-$("testBridgeIp").addEventListener("click",function(){var ip=validBridgeIp($("bridgeIp").value);if(!ip){msg("Bridge IP si sahihi.");return}try{localStorage.setItem(bridgeKey,ip)}catch(e){}applyBridgeIp();window.location.assign(bridgeUrl("/health"))});
+$("testBridgeIp").addEventListener("click",function(){var ip=validBridgeIp($("bridgeIp").value);if(!ip){msg("Bridge IP si sahihi.");return}try{localStorage.setItem(bridgeKey,ip)}catch(e){}applyBridgeIp();showLoading("Inakagua Bridge...",ip+":8766");setTimeout(function(){window.location.assign(bridgeUrl("/health"))},90)});
 $("closeHelp").addEventListener("click",function(){show("helpPanel",false);$("helpBtn").focus()});
 $("closeSettings").addEventListener("click",function(){show("settingsPanel",false);$("settingsBtn").focus()});
-$("reloadBtn").addEventListener("click",function(){location.reload()});
-$("videoDiagBtn").addEventListener("click",function(){location.assign("./video-test.html")});
+$("reloadBtn").addEventListener("click",function(){showLoading("Inasasisha Dhakir...","");setTimeout(function(){location.reload()},90)});
+$("videoDiagBtn").addEventListener("click",function(){showLoading("Inafungua jaribio la video...","");setTimeout(function(){location.assign("./video-test.html")},90)});
 function fontChange(v){
  document.body.className=v?"zoomed":"";
  $("fontBtn").textContent=v?"A+ Maandishi makubwa: Washa":"A+ Maandishi makubwa: Zima";
@@ -251,6 +260,7 @@ document.addEventListener("keydown",function(e){
  });
  if(winner){winner.focus();if(winner.scrollIntoView)winner.scrollIntoView({block:"nearest",inline:"nearest"});e.preventDefault()}
 });
+window.addEventListener("pageshow",hideLoading);window.addEventListener("load",hideLoading);
 render();
 })();
 </script>
