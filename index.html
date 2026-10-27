@@ -62,6 +62,7 @@ h2{margin:0;font-size:25px}
 .popup button{margin-top:10px}
 .settings-row{display:flex;gap:10px;align-items:center;margin:12px 0;flex-wrap:wrap}
 .check{color:#c3dbea;font-size:17px}
+.bridge-input{width:220px;padding:11px 13px;border-radius:10px;border:1px solid #4b6e85;background:#10283c;color:#fff;font-size:18px}
 .zoomed{font-size:110%}
 .zoomed h1{font-size:46px}.zoomed button{font-size:21px}.zoomed .tile strong{font-size:24px}
 @media(max-width:900px){.quick{grid-template-columns:repeat(2,minmax(0,1fr))}.cols{grid-template-columns:1fr}.edition{font-size:13px}.shell{width:93%}h1{font-size:36px}form{flex-wrap:wrap}form input{flex-basis:100%}form button{flex:1}}
@@ -101,6 +102,7 @@ h2{margin:0;font-size:25px}
  <div id="settingsPanel" class="popup hidden">
   <p><strong>Mipangilio ya Dhakir Browser TV</strong></p>
   <div class="settings-row"><button type="button" class="low" id="fontBtn">A+ Maandishi makubwa: Zima</button><span class="check">Hifadhi kwenye TV hii pekee.</span></div>
+  <div class="settings-row"><span class="check">Bridge IP:</span><input id="bridgeIp" class="bridge-input" type="text" inputmode="decimal" maxlength="15" value="10.181.192.210"><button type="button" class="low" id="saveBridgeIp">Hifadhi IP</button><button type="button" class="low" id="testBridgeIp">Jaribu Bridge</button></div>
   <p>Hifadhi na orodha ya tovuti hazihamishwi kwenye vifaa vingine. Hakuna private tab halisi kwenye toleo hili.</p>
   <button type="button" class="low" id="closeSettings">Funga</button>
  </div>
@@ -110,7 +112,7 @@ h2{margin:0;font-size:25px}
  <div class="block-head"><h2>Tovuti za haraka</h2><span class="tip">Mishale + OK</span></div>
  <div class="quick">
   <a class="tile" href="https://www.google.com/"><span class="icon">G</span><strong>Google</strong><small>Utafutaji</small></a>
-  <a class="tile youtube" href="http://10.181.192.210:8766/youtube"><span class="icon">▶</span><strong>YouTube App</strong><small>Fungua app rasmi kupitia S25 Ultra Bridge</small></a>
+  <a id="youtubeTile" class="tile youtube" href="http://10.181.192.210:8766/youtube"><span class="icon">▶</span><strong>YouTube App</strong><small>Fungua app rasmi kupitia S25 Ultra Bridge</small></a>
   <a class="tile bbc" href="https://www.bbc.com/swahili"><span class="icon">N</span><strong>Habari</strong><small>BBC Swahili</small></a>
   <a class="tile fawa" href="https://www.fawanews.sc/"><span class="icon">F</span><strong>FawaNews</strong><small>Michezo na video</small></a>
  </div>
@@ -133,8 +135,12 @@ h2{margin:0;font-size:25px}
 "use strict";
 var $=function(id){return document.getElementById(id)};
 var address=$("address"),status=$("status"),bookmarks=$("favorites"),recentBox=$("recent");
-var favKey="dhakir-vidaa-favs-01",recentKey="dhakir-vidaa-recent-02",fontKey="dhakir-vidaa-large-03";
+var favKey="dhakir-vidaa-favs-01",recentKey="dhakir-vidaa-recent-02",fontKey="dhakir-vidaa-large-03",bridgeKey="dhakir-vidaa-bridge-ip-01",defaultBridgeIp="10.181.192.210";
 function msg(s){status.textContent=s}
+function validBridgeIp(v){var m=String(v||"").replace(/^\s+|\s+$/g,"");if(!/^(?:\d{1,3}\.){3}\d{1,3}$/.test(m))return null;var a=m.split(".");for(var i=0;i<4;i++){var n=+a[i];if(n<0||n>255)return null}return m}
+function getBridgeIp(){try{return validBridgeIp(localStorage.getItem(bridgeKey))||defaultBridgeIp}catch(e){return defaultBridgeIp}}
+function bridgeUrl(path){return "http://"+getBridgeIp()+":8766"+path}
+function applyBridgeIp(){var ip=getBridgeIp();$("bridgeIp").value=ip;$("youtubeTile").href=bridgeUrl("/youtube")}
 function read(key){
  try{var v=JSON.parse(localStorage.getItem(key)||"[]");if(v&&v instanceof Array){return v.filter(function(x){return typeof x==="string"&&/^https?:\/\//i.test(x)}).slice(0,8)}}catch(e){}
  return []
@@ -193,6 +199,8 @@ function toggle(id){show(id,$(id).className.indexOf("hidden")>=0);var el=$(id);i
 function hidePopups(){show("helpPanel",false);show("settingsPanel",false);show("testPanel",false)}
 $("helpBtn").addEventListener("click",function(){show("settingsPanel",false);show("testPanel",false);toggle("helpPanel")});
 $("settingsBtn").addEventListener("click",function(){show("helpPanel",false);show("testPanel",false);toggle("settingsPanel")});
+$("saveBridgeIp").addEventListener("click",function(){var ip=validBridgeIp($("bridgeIp").value);if(!ip){msg("Bridge IP si sahihi.");return}try{localStorage.setItem(bridgeKey,ip)}catch(e){}applyBridgeIp();msg("Bridge IP imehifadhiwa: "+ip)});
+$("testBridgeIp").addEventListener("click",function(){var ip=validBridgeIp($("bridgeIp").value);if(!ip){msg("Bridge IP si sahihi.");return}try{localStorage.setItem(bridgeKey,ip)}catch(e){}applyBridgeIp();window.location.assign(bridgeUrl("/health"))});
 $("closeHelp").addEventListener("click",function(){show("helpPanel",false);$("helpBtn").focus()});
 $("closeSettings").addEventListener("click",function(){show("settingsPanel",false);$("settingsBtn").focus()});
 $("reloadBtn").addEventListener("click",function(){location.reload()});
@@ -204,13 +212,14 @@ function fontChange(v){
 }
 var isLarge=false;try{isLarge=localStorage.getItem(fontKey)==="1"}catch(e){}
 fontChange(isLarge);
+applyBridgeIp();
 $("fontBtn").addEventListener("click",function(){isLarge=!isLarge;fontChange(isLarge)});
 $("testBtn").addEventListener("click",function(){
  show("helpPanel",false);show("settingsPanel",false);
  var storage=false;try{localStorage.setItem("dhakir-v03-test","1");storage=localStorage.getItem("dhakir-v03-test")==="1";localStorage.removeItem("dhakir-v03-test")}catch(e){}
  var full=!!(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen);
  var p=$("testPanel");p.textContent="";
- var t=document.createElement("p");t.textContent="Ukaguzi wa TV: Hifadhi ya ndani "+(storage?"IPO":"HAIPATIKANI")+" · Fullscreen API "+(full?"ipo (inategemea tovuti)":"haijapatikana")+" · Skrini "+screen.width+"×"+screen.height+" · YouTube Bridge: Samsung S25 Ultra (10.181.192.210:8766).";
+ var t=document.createElement("p");t.textContent="Ukaguzi wa TV: Hifadhi ya ndani "+(storage?"IPO":"HAIPATIKANI")+" · Fullscreen API "+(full?"ipo (inategemea tovuti)":"haijapatikana")+" · Skrini "+screen.width+"×"+screen.height+" · YouTube Bridge: Samsung S25 Ultra ("+getBridgeIp()+":8766).";
  p.appendChild(t);
  var b=document.createElement("button");b.type="button";b.className="low";b.textContent="Funga";b.addEventListener("click",function(){show("testPanel",false);$("testBtn").focus()});p.appendChild(b);
  show("testPanel",true);p.scrollIntoView(false)
