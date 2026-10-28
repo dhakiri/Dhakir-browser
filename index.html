@@ -101,6 +101,7 @@ button.refresh{background:#315f78;color:#eaffff;border:1px solid #64dce6}
   <button type="button" class="low" id="settingsBtn">⚙ Mipangilio</button>
   <button type="button" class="low refresh" id="reloadBtn">↻ Sasisha</button>
   <button type="button" class="low" id="testBtn">✓ Kagua TV</button>
+  <button type="button" class="low" id="installBtn">⬇ Sakinisha Dhakir</button>
   <button type="button" class="low" id="videoDiagBtn">▶ Jaribu Video</button>
  </div>
  <div id="helpPanel" class="popup hidden">
@@ -219,6 +220,7 @@ $("testBridgeIp").addEventListener("click",function(){var ip=validBridgeIp($("br
 $("closeHelp").addEventListener("click",function(){show("helpPanel",false);$("helpBtn").focus()});
 $("closeSettings").addEventListener("click",function(){show("settingsPanel",false);$("settingsBtn").focus()});
 $("reloadBtn").addEventListener("click",function(){showLoading("Inasasisha Dhakir...","");setTimeout(function(){location.reload()},90)});
+$("installBtn").addEventListener("click",function(){showLoading("Inafungua installer ya Dhakir...","");setTimeout(function(){location.assign("./installer.html")},90)});
 $("videoDiagBtn").addEventListener("click",function(){showLoading("Inafungua jaribio la video...","");setTimeout(function(){location.assign("./video-test.html")},90)});
 function fontChange(v){
  document.body.className=v?"zoomed":"";
