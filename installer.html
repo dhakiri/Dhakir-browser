@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="sw">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dhakir VIDAA Installer</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#081522;color:#eef9fd;font-family:Arial,Helvetica,sans-serif}
+main{width:92%;max-width:1150px;margin:auto;padding:34px 0}
+h1{font-size:38px;margin:0 0 8px}
+p{font-size:19px;line-height:1.5;color:#bdd2df}
+.card{background:#142b40;border:1px solid #426a82;border-radius:18px;padding:22px;margin:18px 0}
+button,a{font:inherit}
+button{border:0;border-radius:12px;padding:15px 20px;margin:7px;background:#62dce6;color:#08242d;font-weight:bold;font-size:18px}
+button.danger{background:#754252;color:white}
+button.warn{background:#746431;color:white}
+button:focus,a:focus{outline:5px solid #ffd05a;outline-offset:4px}
+#status{white-space:pre-wrap;font-size:18px;color:#e2f6fb}
+.good{color:#9be5ab}.bad{color:#ffb1a1}.muted{font-size:15px;color:#91afc2}
+</style>
+</head>
+<body>
+<main>
+<h1>Dhakir Browser · VIDAA Installer</h1>
+<p>Installer hii huongeza Dhakir Browser kwenye launcher ya VIDAA kwa kutumia registry API iliyopo kwenye TV. Haitafuta app nyingine.</p>
+
+<div class="card">
+<p id="cap">Inakagua uwezo wa TV...</p>
+<p id="status">Hakuna mabadiliko yaliyofanywa bado.</p>
+<button id="install">Sakinisha / Sasisha Dhakir</button>
+<button id="verify">Hakiki Registry</button>
+<button id="remove" class="danger">Ondoa Dhakir pekee</button>
+<button id="restore" class="warn">Rudisha Backup ya awali</button>
+</div>
+
+<p class="muted">Usizime TV wakati wa write. Installer huhifadhi backup ya registry kwenye localStorage kabla ya write ya kwanza, hufanya read-back verification baada ya kila write, na huondoa entry ya Dhakir pekee.</p>
+<p><a href="./">← Rudi Dhakir Browser</a></p>
+
+<script>
+(function(){
+"use strict";
+
+var PATH="websdk/Appinfo.json";
+var MODE=6;
+var ID="99001";
+var NAME="Dhakir Browser";
+var URL="https://dhakiri.github.io/Dhakir-browser/";
+var ICON="https://dhakiri.github.io/Dhakir-browser/dhakir-tv-icon.png";
+
+var BK0="dhakir-vidaa-registry-original-v1";
+var BKL="dhakir-vidaa-registry-latest-v1";
+
+var status=document.getElementById("status");
+var cap=document.getElementById("cap");
+
+function say(s,cls){
+  status.textContent=s;
+  status.className=cls||"";
+}
+
+function hasApi(){
+  return typeof HiUtils_createRequest==="function";
+}
+
+function readReg(){
+  if(!hasApi()) throw new Error("HiUtils_createRequest haipo");
+  var r=HiUtils_createRequest("fileRead",{path:PATH,mode:MODE});
+  if(!r||!r.ret) throw new Error("Registry read imekataliwa"+(r&&r.msg?": "+r.msg:""));
+  var o=JSON.parse(r.msg||"{}");
+  if(!o||!(o.AppInfo instanceof Array)) throw new Error("AppInfo schema si sahihi");
+  return {raw:r.msg,obj:o};
+}
+
+function writeReg(o){
+  var r=HiUtils_createRequest("fileWrite",{path:PATH,mode:MODE,writedata:JSON.stringify(o)});
+  if(!r||!r.ret) throw new Error("Registry write imekataliwa"+(r&&r.msg?": "+r.msg:""));
+  return r;
+}
+
+function findDhakir(o){
+  for(var i=0;i<o.AppInfo.length;i++){
+    var a=o.AppInfo[i];
+    if(a&&(String(a.Id)===ID||a.AppName===NAME||a.URL===URL)) return {i:i,a:a};
+  }
+  return null;
+}
+
+function idCollision(o){
+  for(var i=0;i<o.AppInfo.length;i++){
+    var a=o.AppInfo[i];
+    if(a&&String(a.Id)===ID&&a.AppName!==NAME&&a.URL!==URL) return a;
+  }
+  return null;
+}
+
+function refresh(info){
+  var msg={
+    type:"APPMessage",
+    MsgType:"appControl",
+    action:"updateAppState",
+    source:"browser",
+    startAppType:2,
+    param:{
+      event:"AllAppsUpdate",
+      SubModuleName:"AllApps",
+      startFrom:"",
+      appInfo:info||ID
+    }
+  };
+  try{
+    if(window.omi_platform&&typeof omi_platform.sendPlatformMessage==="function"){
+      omi_platform.sendPlatformMessage(JSON.stringify(msg)); return true;
+    }
+  }catch(e){}
+  try{
+    if(window.opera_omi&&typeof opera_omi.sendPlatformMessage==="function"){
+      opera_omi.sendPlatformMessage(JSON.stringify(msg)); return true;
+    }
+  }catch(e){}
+  return false;
+}
+
+function copyTemplate(t){
+  var e={},keys=Object.keys(t||{});
+  for(var i=0;i<keys.length;i++) e[keys[i]]=t[keys[i]];
+
+  e.Id=ID;
+  e.AppName=NAME;
+  e.Title=NAME;
+  e.URL=URL;
+  e.StartCommand=URL;
+
+  if("Thumb" in e) e.Thumb=ICON;
+  if("Icon_96" in e) e.Icon_96=ICON;
+  if("Image" in e) e.Image=ICON;
+  if("IconURL" in e) e.IconURL=ICON;
+
+  if("InstallTime" in e){
+    var d=new Date();
+    e.InstallTime=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+  }
+  if("RunTimes" in e) e.RunTimes=(typeof e.RunTimes==="string"?"0":0);
+  if("StoreType" in e) e.StoreType="hisense";
+  if("PreInstall" in e) e.PreInstall=(typeof e.PreInstall==="string"?"false":false);
+
+  return e;
+}
+
+function saveBackups(raw,obj){
+  try{
+    localStorage.setItem(BKL,raw);
+    if(!findDhakir(obj)&&!localStorage.getItem(BK0)){
+      localStorage.setItem(BK0,raw);
+    }
+  }catch(e){}
+}
+
+function verify(){
+  try{
+    var r=readReg(),f=findDhakir(r.obj);
+    if(f){
+      say("✓ Dhakir ipo registry.\nId="+f.a.Id+"\nURL="+f.a.URL+"\nApps="+r.obj.AppInfo.length,"good");
+    }else{
+      say("Dhakir haipo registry. Apps="+r.obj.AppInfo.length);
+    }
+  }catch(e){
+    say("Hakiki imeshindwa: "+e.message,"bad");
+  }
+}
+
+var hasOmi=false;
+try{
+  hasOmi=(window.omi_platform&&typeof omi_platform.sendPlatformMessage==="function")||
+         (window.opera_omi&&typeof opera_omi.sendPlatformMessage==="function");
+}catch(e){}
+cap.textContent="Registry API="+(hasApi()?"IPO":"HAIPO")+" · omi_platform="+(hasOmi?"IPO":"HAIPO");
+
+document.getElementById("verify").onclick=verify;
+
+document.getElementById("install").onclick=function(){
+  try{
+    say("Inasoma registry...");
+    var r=readReg();
+    if(!r.obj.AppInfo.length) throw new Error("Hakuna template app; write imezuiwa");
+
+    var collision=idCollision(r.obj);
+    if(collision) throw new Error("Id "+ID+" tayari inatumiwa na "+(collision.AppName||"app nyingine"));
+
+    saveBackups(r.raw,r.obj);
+
+    var found=findDhakir(r.obj);
+    var template=found?found.a:r.obj.AppInfo[0];
+    var entry=copyTemplate(template);
+
+    if(found) r.obj.AppInfo[found.i]=entry;
+    else r.obj.AppInfo.push(entry);
+
+    say("Inaandika entry ya Dhakir...");
+    writeReg(r.obj);
+
+    var check=readReg(),ok=findDhakir(check.obj);
+    if(!ok||ok.a.URL!==URL) throw new Error("Read-back verification haikupita");
+
+    var sent=refresh(entry);
+    say(
+      "✓ Dhakir imeandikwa na kuthibitishwa kwenye registry.\n"+
+      "Apps="+check.obj.AppInfo.length+"\n"+
+      "Launcher refresh="+(sent?"imetumwa":"haipatikani")+"\n\n"+
+      "Bonyeza Home/Apps. Ikiwa haionekani, restart TV kikamilifu.",
+      "good"
+    );
+  }catch(e){
+    say("INSTALL IMESHINDWA: "+e.message+"\nHakuna write nyingine itafanywa.","bad");
+  }
+};
+
+document.getElementById("remove").onclick=function(){
+  try{
+    var r=readReg(),out=[],removed=0;
+    for(var i=0;i<r.obj.AppInfo.length;i++){
+      var a=r.obj.AppInfo[i];
+      if(a&&(String(a.Id)===ID||a.AppName===NAME||a.URL===URL)){ removed++; continue; }
+      out.push(a);
+    }
+
+    if(!removed){
+      say("Dhakir haipo registry; hakuna kilichobadilishwa.");
+      return;
+    }
+
+    try{localStorage.setItem(BKL,r.raw)}catch(e){}
+    r.obj.AppInfo=out;
+    writeReg(r.obj);
+
+    var check=readReg();
+    if(findDhakir(check.obj)) throw new Error("Dhakir bado ipo baada ya write");
+
+    refresh(ID);
+    say("✓ Dhakir imeondolewa pekee. Apps zilizobaki="+check.obj.AppInfo.length,"good");
+  }catch(e){
+    say("REMOVE IMESHINDWA: "+e.message,"bad");
+  }
+};
+
+document.getElementById("restore").onclick=function(){
+  try{
+    var raw=localStorage.getItem(BK0);
+    if(!raw) throw new Error("Backup ya awali haipo");
+
+    var obj=JSON.parse(raw);
+    if(!obj||!(obj.AppInfo instanceof Array)) throw new Error("Backup schema si sahihi");
+
+    writeReg(obj);
+    var check=readReg();
+    refresh(ID);
+    say("✓ Backup ya awali imerudishwa. Apps="+check.obj.AppInfo.length,"good");
+  }catch(e){
+    say("RESTORE IMESHINDWA: "+e.message,"bad");
+  }
+};
+
+})();
+</script>
+</main>
+</body>
+</html>
