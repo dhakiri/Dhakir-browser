@@ -83,7 +83,7 @@ button.refresh{background:#315f78;color:#eaffff;border:1px solid #64dce6}
 <div class="shell">
 <header>
  <div class="brand"><span class="emblem">D</span><span>Dhakir Browser <span style="color:#78d9e7">TV</span></span></div>
- <div class="edition">VIDAA Edition · v0.4</div>
+ <div class="edition">VIDAA Launcher · v0.5</div>
 </header>
 <main>
 <section>
@@ -101,7 +101,6 @@ button.refresh{background:#315f78;color:#eaffff;border:1px solid #64dce6}
   <button type="button" class="low" id="settingsBtn">⚙ Mipangilio</button>
   <button type="button" class="low refresh" id="reloadBtn">↻ Sasisha</button>
   <button type="button" class="low" id="testBtn">✓ Kagua TV</button>
-  <button type="button" class="low" id="installBtn">⬇ Sakinisha Dhakir</button>
   <button type="button" class="low" id="videoDiagBtn">▶ Jaribu Video</button>
  </div>
  <div id="helpPanel" class="popup hidden">
@@ -139,7 +138,7 @@ button.refresh{background:#315f78;color:#eaffff;border:1px solid #64dce6}
  </div>
 </section>
 </main>
-<footer class="bottom">Dhakir Browser TV v0.3 · YouTube App hutumia Dhakir TV Bridge kwenye Samsung S25 Ultra/hotspot. Ni ukurasa wa kuanzia unaotumia browser ya Hisense VIDAA. Orodha ya hivi karibuni si history kamili ya TV. Video, fullscreen, matangazo na private mode vinategemea browser na tovuti husika. Hosted test version, not an installed VIDAA app.</footer>
+<footer class="bottom">Dhakir Browser TV v0.5 · Imeongezwa kwenye VIDAA launcher. YouTube App hutumia Dhakir TV Bridge kwenye Samsung S25 Ultra/hotspot. Orodha ya hivi karibuni si history kamili ya TV. Video, fullscreen, matangazo na private mode vinategemea engine ya VIDAA na tovuti husika.</footer>
 </div>
 <script>
 (function(){
@@ -220,7 +219,6 @@ $("testBridgeIp").addEventListener("click",function(){var ip=validBridgeIp($("br
 $("closeHelp").addEventListener("click",function(){show("helpPanel",false);$("helpBtn").focus()});
 $("closeSettings").addEventListener("click",function(){show("settingsPanel",false);$("settingsBtn").focus()});
 $("reloadBtn").addEventListener("click",function(){showLoading("Inasasisha Dhakir...","");setTimeout(function(){location.reload()},90)});
-$("installBtn").addEventListener("click",function(){showLoading("Inafungua installer ya Dhakir...","");setTimeout(function(){location.assign("./installer.html")},90)});
 $("videoDiagBtn").addEventListener("click",function(){showLoading("Inafungua jaribio la video...","");setTimeout(function(){location.assign("./video-test.html")},90)});
 function fontChange(v){
  document.body.className=v?"zoomed":"";
