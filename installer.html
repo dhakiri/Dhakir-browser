@@ -260,6 +260,51 @@ document.getElementById("restore").onclick=function(){
   }
 };
 
+function focusables(){
+  var all=document.querySelectorAll("button,a[href]"),out=[];
+  for(var i=0;i<all.length;i++){
+    var r=all[i].getBoundingClientRect();
+    if(r.width>0&&r.height>0) out.push(all[i]);
+  }
+  return out;
+}
+
+document.addEventListener("keydown",function(e){
+  var k=e.keyCode||e.which;
+  var items=focusables();
+  var cur=document.activeElement;
+  var i=items.indexOf(cur);
+
+  if(k===27||k===461||k===8){
+    e.preventDefault();
+    location.assign("./");
+    return;
+  }
+
+  if(k===13||k===23){
+    if(cur&&typeof cur.click==="function"){
+      e.preventDefault();
+      cur.click();
+    }
+    return;
+  }
+
+  if(k===37||k===38||k===39||k===40){
+    e.preventDefault();
+    if(!items.length) return;
+    if(i<0) i=0;
+    else if(k===37||k===38) i=(i-1+items.length)%items.length;
+    else i=(i+1)%items.length;
+    items[i].focus();
+    if(items[i].scrollIntoView) items[i].scrollIntoView({block:"nearest",inline:"nearest"});
+  }
+});
+
+setTimeout(function(){
+  var b=document.getElementById("install");
+  if(b) b.focus();
+},120);
+
 })();
 </script>
 </main>
