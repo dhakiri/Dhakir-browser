@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta name="theme-color" content="#091321">
-<title>Dhakir Browser TV v0.5.1 | VIDAA</title>
+<title>Dhakir Browser TV v0.6.0 | VIDAA</title>
 <style>
 *{box-sizing:border-box}
 html{background:#08111e}
@@ -83,7 +83,7 @@ button.refresh{background:#315f78;color:#eaffff;border:1px solid #64dce6}
 <div class="shell">
 <header>
  <div class="brand"><span class="emblem">D</span><span>Dhakir Browser <span style="color:#78d9e7">TV</span></span></div>
- <div class="edition">VIDAA Launcher · v0.5.1</div>
+ <div class="edition">VIDAA Launcher · v0.6.0</div>
 </header>
 <main>
 <section>
@@ -124,7 +124,7 @@ button.refresh{background:#315f78;color:#eaffff;border:1px solid #64dce6}
   <a id="googleTile" data-shortcut="1" class="tile" href="https://www.google.com/"><span class="shortcut-badge">1</span><span class="icon">G</span><strong>Google</strong><small>Utafutaji</small></a>
   <a id="youtubeTile" data-shortcut="2" class="tile youtube" href="http://10.181.192.210:8766/youtube"><span class="shortcut-badge">2</span><span class="icon">▶</span><strong>YouTube App</strong><small>Fungua app rasmi kupitia S25 Ultra Bridge</small></a>
   <a id="newsTile" data-shortcut="3" class="tile bbc" href="https://www.bbc.com/swahili"><span class="shortcut-badge">3</span><span class="icon">N</span><strong>Habari</strong><small>BBC Swahili</small></a>
-  <a id="fawaTile" data-shortcut="4" class="tile fawa" href="http://www.fawanews.sc/"><span class="shortcut-badge">4</span><span class="icon">F</span><strong>FawaNews</strong><small>Michezo na video</small></a>
+  <a id="fawaTile" data-shortcut="4" class="tile fawa" href="http://10.181.192.210:8766/fawa"><span class="shortcut-badge">4</span><span class="icon">F</span><strong>FawaNews TV</strong><small>Chagua channel kwa mishale + OK</small></a>
  </div>
 </section>
 <section class="cols">
@@ -138,7 +138,7 @@ button.refresh{background:#315f78;color:#eaffff;border:1px solid #64dce6}
  </div>
 </section>
 </main>
-<footer class="bottom">Dhakir Browser TV v0.5.1 · Imeongezwa kwenye VIDAA launcher. YouTube App hutumia Dhakir TV Bridge kwenye Samsung S25 Ultra/hotspot. Orodha ya hivi karibuni si history kamili ya TV. Video, fullscreen, matangazo na private mode vinategemea engine ya VIDAA na tovuti husika.</footer>
+<footer class="bottom">Dhakir Browser TV v0.6.0 · Imeongezwa kwenye VIDAA launcher. YouTube App na orodha ya FawaNews hutumia Dhakir TV Bridge kwenye Samsung S25 Ultra/hotspot. Orodha ya hivi karibuni si history kamili ya TV. Video, fullscreen, matangazo na private mode vinategemea engine ya VIDAA na tovuti husika.</footer>
 </div>
 <script>
 (function(){
@@ -154,7 +154,7 @@ var loadingTimer=null;function hideLoading(){if(loadingTimer){clearTimeout(loadi
 function validBridgeIp(v){var m=String(v||"").replace(/^\s+|\s+$/g,"");if(!/^(?:\d{1,3}\.){3}\d{1,3}$/.test(m))return null;var a=m.split(".");for(var i=0;i<4;i++){var n=+a[i];if(n<0||n>255)return null}return m}
 function getBridgeIp(){try{return validBridgeIp(localStorage.getItem(bridgeKey))||defaultBridgeIp}catch(e){return defaultBridgeIp}}
 function bridgeUrl(path){return "http://"+getBridgeIp()+":8766"+path}
-function applyBridgeIp(){var ip=getBridgeIp();$("bridgeIp").value=ip;$("youtubeTile").href=bridgeUrl("/youtube")}
+function applyBridgeIp(){var ip=getBridgeIp();$("bridgeIp").value=ip;$("youtubeTile").href=bridgeUrl("/youtube");$("fawaTile").href=bridgeUrl("/fawa")}
 function read(key){
  try{var v=JSON.parse(localStorage.getItem(key)||"[]");if(v&&v instanceof Array){return v.filter(function(x){return typeof x==="string"&&/^https?:\/\//i.test(x)}).slice(0,8)}}catch(e){}
  return []
